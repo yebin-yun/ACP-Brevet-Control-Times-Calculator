@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+   <head>
+      <title>ACP Controle Times</title>
+      <meta charset="utf-8">
+      <!-- 'viewport' is used by bootstrap to respond to device size -->
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <!-- Bootstrap includes javascript and css  (must follow jquery) -->
+      <link
+         rel="stylesheet"
+         href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+         integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+         crossorigin="anonymous">
+   </head>
+   <body>
+      <div class="container">
+         <h1>ACP Brevet Times</h1>
+         {% if brevet == "" and begin == "" %}
+             <p>There wasn't any control time submitted. Please, click the Submit button to submit the control times before clicking the Display button.</p>
+         {% else %}
+             <p>The result of the latest submission for ACP-sanctioned brevets at {{ brevet }} kilometers and beginning at {{ begin }}.</p>
+             <!-- Design on bootstrap grid -->
+             <form role="form">
+                <div class="row">
+                   <div class="col-md-12">
+                      <table class="control_time_table">
+                         {% for row in result %}
+                         <tr class="control">
+                            {% for key, value in row.items() %}
+                                <!-- Dist (km) -->
+                                {% if key == 'km' %}
+                                    <td style="width:250px"> Control Location: {{ value }} km </td>
+                                {% endif %}
+                                <!-- Open time -->
+                                {% if key == 'open' %}
+                                    <td style="width:300px"> Open Time: {{ value }} </td>
+                                {% endif %}
+                                <!-- Close time -->
+                                {% if key == 'close' %}
+                                    <td style="width:300px"> Close Time: {{ value }} </td>
+                                {% endif %}
+                             {% endfor %}
+                         </tr>
+                         {% endfor %}
+                      </table>
+                   </div>
+                   <!-- col -->
+                </div>
+                <!-- row -->
+             </form>
+         {% endif %}
+      </div>
+   </body>
+</html>
