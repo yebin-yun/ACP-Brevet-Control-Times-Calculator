@@ -19,17 +19,23 @@ class Mongodb:
     def set_collection(self, collection_name):
         self.collection = self.db[collection_name]
 
+    def insert(self, row):
+        self.collection.insert_one(row)
+
     def list_all_rows(self):
         return list(self.collection.find())
 
-    def find_fields(self, fields):
+    def generate_id(self):
+        return self.collection.find().count() + 1
+
+    def filter_find(self, fields=[], query={}):
         fields_dict = {}
         for f in fields:
             fields_dict[f] = 1
         fields_dict["_id"] = 0
 
         rows = []
-        for row in self.collection.find({}, fields_dict):
+        for row in self.collection.find(query, fields_dict):
             rows.append(row)
         return rows
 
