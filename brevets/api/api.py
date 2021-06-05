@@ -61,7 +61,7 @@ class register(Resource):
         user_info = parser.parse_args()
         try:
             user_info['password'] = hash_password(user_info['password'])
-            if db_client.find_count({'username': user_info['username']}) == 0:
+            if len(db_client.filter_find({'username': user_info['username']})) == 0:
                 user_info['id'] = db_client.generate_id()
                 db_client.insert(user_info)
                 return "Successfully added the user!", 201
