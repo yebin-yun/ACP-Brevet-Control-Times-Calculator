@@ -22,6 +22,7 @@ parser = reqparse.RequestParser()
 parser.add_argument('username', required=True, help="Need an username!")
 parser.add_argument('password', required=True, help="Need a password!")
 
+SECRET_KEY = ""
 
 def csv_form(rows):
     headers = list(rows[0].keys())
@@ -38,12 +39,12 @@ def verify_password(password, hashVal):
     return pwd_context.verify(password, hashVal)
 
 def generate_auth_token(id, expiration=600):
-   s = Serializer('test1234@#$', expires_in=expiration)
+   s = Serializer(SECRET_KEY, expires_in=expiration)
    # Pass index of user
    return s.dumps({'id': id})
 
 def verify_auth_token(token):
-    s = Serializer('test1234@#$')
+    s = Serializer(SECRET_KEY)
     try:
         data = s.loads(token)
     except SignatureExpired:
@@ -74,8 +75,12 @@ class register(Resource):
 class token(Resource):
     def get(self):
         db_client.set_collection("user")
+        # Get the argument username and password; default value will be ""
         username = request.args.get("username", default="")
         password = request.args.get("password", default="")
+        # Get the argument secret key and set it to the global variable
+        global SECRET_KEY
+        SECRET_KEY = request.args.get("secretkey", default="secretkey272781239@#!")
         # Check if both username and password are passed in
         if username == "" or password == "":
             return abort(400, "Need both username and password!")
@@ -105,6 +110,9 @@ class listBrevetTimes(Resource):
         top = int(request.args.get("top", default=-1))
         # Get the argument token; default value will be ""
         user_token = request.args.get("token", default="")
+        # Get the argument secret key and set it to the global variable
+        global SECRET_KEY
+        SECRET_KEY = request.args.get("secretkey", default="secretkey272781239@#!")
         if not verify_auth_token(user_token):
             return abort(400, "Authentication failed!")
         else:
