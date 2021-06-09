@@ -110,7 +110,6 @@ def brevet():
     return render_template("brevet_control_times.html")
 
 @app.route("/<option>")
-# use session['token']
 def display(option):
     token = current_user.token
     top = request.args.get("top", type=str)
