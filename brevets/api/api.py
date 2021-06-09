@@ -105,6 +105,7 @@ class listBrevetTimes(Resource):
         # Get the argument token; default value will be ""
         user_token = request.args.get("token", default="")
         if not verify_auth_token(user_token):
+            app.logger.debug(verify_auth_token(user_token.encode()))
             return abort(400, "Authentication failed!")
         else:
             if option == "All":
