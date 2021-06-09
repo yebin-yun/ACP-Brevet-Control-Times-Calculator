@@ -3,3 +3,4 @@ flask-restful==0.3.8
 pymongo
 itsdangerous==0.24
 passlib==1.7.1
+Werkzeug==0.12.2
