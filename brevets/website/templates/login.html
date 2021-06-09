@@ -1,7 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
+<style>
+	.frame {
+		margin-top: 10px;
+		margin-bottom: 10px;
+		color: seagreen;
+    }
+    .error {
+    	color:firebrick;
+    }
+    #button-login:hover{
+		background-color:darkseagreen;
+    }
+</style>
 <div class="row">
-	<h1>Sign In</h1>
+	<h1 class="frame">Sign In</h1>
 </div>
 <div class="row">
 	<form method="post" novalidate>
@@ -14,7 +27,7 @@
 				{% if form.username.errors %}
 				<ul class="errors">
 					{% for error in form.username.errors %}
-					<li>{{ error }}</li>
+					<li class="error">{{ error }}</li>
 					{% endfor %}
 				</ul>
 				{% endif %}
@@ -25,7 +38,7 @@
 				{% if form.password.errors %}
 				<ul class="errors">
 					{% for error in form.password.errors %}
-					<li>{{ error }}</li>
+					<li class="error">{{ error }}</li>
 					{% endfor %}
 				</ul>
 				{% endif %}
@@ -35,7 +48,7 @@
 				<label class="form-check-label" for="rememberMeCheck">Remember</label>
 			</div>
 			<div class="input-group mb-4">
-				<button class="btn btn-outline-primary" id="button-login">Login</button>
+				<button style="color:seagreen; border-color:seagreen;" class="btn btn-outline-primary" id="button-login">Login</button>
 			</div>
 		</div>
 	</form>
