@@ -1,6 +1,6 @@
 from flask import Flask, request, abort
 from flask_restful import Resource, Api, reqparse
-from pymongo import MongoClient
+#from pymongo import MongoClient
 from bson import json_util
 import json
 import db # Database operations
@@ -9,7 +9,7 @@ from passlib.apps import custom_app_context as pwd_context
 from itsdangerous import (TimedJSONWebSignatureSerializer \
                                   as Serializer, BadSignature, \
                                   SignatureExpired)
-import time
+#import time
 
 app = Flask(__name__)
 api = Api(app)
@@ -22,7 +22,7 @@ parser = reqparse.RequestParser()
 parser.add_argument('username', required=True, help="Need an username!")
 parser.add_argument('password', required=True, help="Need a password!")
 
-SECRET_KEY = ""
+SECRET_KEY = "nobodyknowsthekey272781239@#!"
 
 def csv_form(rows):
     headers = list(rows[0].keys())
@@ -60,16 +60,13 @@ class register(Resource):
     def post(self):
         db_client.set_collection("user")
         user_info = parser.parse_args()
-        try:
-            user_info['password'] = hash_password(user_info['password'])
-            if len(db_client.filter_find({'username': user_info['username']})) == 0:
-                user_info['id'] = db_client.generate_id()
-                db_client.insert(user_info)
-                return "Successfully added the user!", 201
-            else:
-                return abort(400, "The user already exists!")
-        except Exception as e:
-            return abort(400, e)
+        user_info['password'] = hash_password(user_info['password'])
+        if len(db_client.filter_find([], {'username': user_info['username']})) == 0:
+            user_info['id'] = db_client.generate_id()
+            db_client.insert(user_info)
+            return "Successfully registered!", 201
+        else:
+            return abort(400, "The user already exists!")
 
 
 class token(Resource):
@@ -78,24 +75,21 @@ class token(Resource):
         # Get the argument username and password; default value will be ""
         username = request.args.get("username", default="")
         password = request.args.get("password", default="")
-        # Get the argument secret key and set it to the global variable
-        global SECRET_KEY
-        SECRET_KEY = request.args.get("secretkey", default="secretkey272781239@#!")
         # Check if both username and password are passed in
         if username == "" or password == "":
             return abort(400, "Need both username and password!")
         # Get the user info
         user_info = db_client.filter_find(["id", "password"], {'username': username})
         # Check if the user is registered
-        if len(user_info) == 1:
+        #if len(user_info) == 1:
+        if user_info:
             user_info = user_info[0]
-            auth = {"duration": 600}
-            hashed_password = user_info["password"]
             id = user_info["id"]
+            auth = {"id": id, "duration": 600}
+            hashed_password = user_info["password"]
             # Check if the password matches
             if verify_password(password, hashed_password):
                 auth["token"] = generate_auth_token(id).decode("utf-8")
-                app.logger.debug(f"token: {auth['token']}")
                 return json.dumps(auth), 201
             # When the password doesn't match the one in the db
             return abort(400, "Wrong password. Try again!")
@@ -110,9 +104,6 @@ class listBrevetTimes(Resource):
         top = int(request.args.get("top", default=-1))
         # Get the argument token; default value will be ""
         user_token = request.args.get("token", default="")
-        # Get the argument secret key and set it to the global variable
-        global SECRET_KEY
-        SECRET_KEY = request.args.get("secretkey", default="secretkey272781239@#!")
         if not verify_auth_token(user_token):
             return abort(400, "Authentication failed!")
         else:
