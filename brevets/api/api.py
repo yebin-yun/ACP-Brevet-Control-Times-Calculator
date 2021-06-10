@@ -4,7 +4,6 @@ from bson import json_util
 import json
 import db # Database operations
 import os
-#from passlib.apps import custom_app_context as pwd_context
 from passlib.hash import sha256_crypt as pwd_context
 from itsdangerous import (TimedJSONWebSignatureSerializer \
                                   as Serializer, BadSignature, \
@@ -32,8 +31,8 @@ def csv_form(rows):
     return result
 
 def hash_password(password):
-    #return pwd_context.encrypt(password)
     return pwd_context.using(salt="somestring").encrypt(password)
+
 def verify_password(password, hashVal):
     return pwd_context.verify(password, hashVal)
 
