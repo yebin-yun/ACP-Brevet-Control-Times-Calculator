@@ -7,11 +7,15 @@ from flask_login import (LoginManager, current_user, login_required,
                          confirm_login, fresh_login_required)
 from flask_wtf import FlaskForm as Form
 from wtforms import BooleanField, StringField, PasswordField, validators
-
+from passlib.hash import sha256_crypt as pwd_context
 import json
+
 ###
 # Globals
 ###
+
+def hash_password(password):
+    return pwd_context.using(salt="somestring").encrypt(password)
 
 class LoginForm(Form):
     username = StringField('Username', [
@@ -83,7 +87,6 @@ def load_user(user_id):
     user = None
     if 'id' in session and 'username' in session and 'token' in session:
         id = session['id']
-        app.logger.debug(f"id: {id} {type(id)}, user_id: {user_id}, {type(user_id)}")
         if id == user_id:
             username = session['username']
             token = session['token']
@@ -142,7 +145,8 @@ def register():
     if form.validate_on_submit() and request.method == "POST" \
             and "username" in request.form and "password" in request.form and "confirm" in request.form:
         username = request.form["username"]
-        password = request.form["password"]
+        password = hash_password(request.form["password"])
+        app.logger.debug(f"website: {password}")
         url = 'http://' + os.environ['BACKEND_ADDR'] + ':' + os.environ['BACKEND_PORT'] + '/register'
         post_req = requests.post(url, data={"username": username, "password": password})
         if post_req.status_code == 201:
@@ -161,7 +165,7 @@ def login():
     if form.validate_on_submit() and request.method == "POST" \
             and "username" in request.form and "password" in request.form:
         username = request.form["username"]
-        password = request.form["password"]
+        password = hash_password(request.form["password"])
         url = 'http://' + os.environ['BACKEND_ADDR'] + ':' + os.environ['BACKEND_PORT'] \
               + '/token?username=' + username + '&password=' + password
         get_req = requests.get(url)
@@ -169,7 +173,6 @@ def login():
             get_req_json = json.loads(get_req.json())
             token = get_req_json['token']
             id = str(get_req_json['id'])
-            app.logger.debug(type(id))
             remember = request.form.get("remember", "false") == "true"
             user = User(id, username).set_token(token)
             if login_user(user, remember=remember):

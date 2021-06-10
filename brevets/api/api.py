@@ -1,15 +1,14 @@
 from flask import Flask, request, abort
 from flask_restful import Resource, Api, reqparse
-#from pymongo import MongoClient
 from bson import json_util
 import json
 import db # Database operations
 import os
-from passlib.apps import custom_app_context as pwd_context
+#from passlib.apps import custom_app_context as pwd_context
+from passlib.hash import sha256_crypt as pwd_context
 from itsdangerous import (TimedJSONWebSignatureSerializer \
                                   as Serializer, BadSignature, \
                                   SignatureExpired)
-#import time
 
 app = Flask(__name__)
 api = Api(app)
@@ -33,8 +32,8 @@ def csv_form(rows):
     return result
 
 def hash_password(password):
-    return pwd_context.encrypt(password)
-
+    #return pwd_context.encrypt(password)
+    return pwd_context.using(salt="somestring").encrypt(password)
 def verify_password(password, hashVal):
     return pwd_context.verify(password, hashVal)
 
@@ -60,7 +59,11 @@ class register(Resource):
     def post(self):
         db_client.set_collection("user")
         user_info = parser.parse_args()
+        if not (2 <= len(user_info['username']) <= 25):
+            return abort(400, "The username has to be 2-25 characters!")
+        app.logger.debug(f"before: {user_info['password']}")
         user_info['password'] = hash_password(user_info['password'])
+        app.logger.debug(f"after: {user_info['password']}")
         if len(db_client.filter_find([], {'username': user_info['username']})) == 0:
             user_info['id'] = db_client.generate_id()
             db_client.insert(user_info)
@@ -81,12 +84,12 @@ class token(Resource):
         # Get the user info
         user_info = db_client.filter_find(["id", "password"], {'username': username})
         # Check if the user is registered
-        #if len(user_info) == 1:
         if user_info:
             user_info = user_info[0]
             id = user_info["id"]
             auth = {"id": id, "duration": 600}
             hashed_password = user_info["password"]
+            app.logger.debug(f"password: {password}, hashed: {hashed_password}, verify: {verify_password(password, hashed_password)}")
             # Check if the password matches
             if verify_password(password, hashed_password):
                 auth["token"] = generate_auth_token(id).decode("utf-8")
@@ -105,7 +108,6 @@ class listBrevetTimes(Resource):
         # Get the argument token; default value will be ""
         user_token = request.args.get("token", default="")
         if not verify_auth_token(user_token):
-            app.logger.debug(verify_auth_token(user_token.encode()))
             return abort(400, "Authentication failed!")
         else:
             if option == "All":
