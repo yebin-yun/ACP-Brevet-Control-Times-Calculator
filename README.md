@@ -33,8 +33,8 @@ This is a Restful service that includes the following functionalities:
 - POST **/register**
     - Registers a new user by storing the following three fields in the database:
         1. id (unique index)
-        2. username 
-        3. password
+        2. username (2-25 characters)
+        3. password (8-25 characters)
 
     - On success, a status code 201 is returned. The body of the response 
     contains a JSON object with the newly added user. 
