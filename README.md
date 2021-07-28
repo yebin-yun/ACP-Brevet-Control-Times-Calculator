@@ -97,15 +97,23 @@ This is a Restful service that includes the following functionalities:
 ![before login](images/website_before_login.png)
 
 This is a consumer program to use the services that the user expose. The services are described above in the api.
+
+![before login](images/website_service.png)
+
 This is a frontend/UI for Brevet app using Flask-WTF and Flask-Login. 
 The frontend/UI should use the authentication, which is created on api. 
 In addition to creating UI for basic authentication and token generation, the following three additional functionalities 
 will be added in the UI: 
 1. registration
+
     ![register](images/website_register.png)
+
 2. sign in & remember me (possible after registration.)
+
     ![register](images/website_sign_in.png)
+
 3. logout (possible after signing in.)
+
     ![before login](images/website_after_login.png)
 
 #### How to test it?
