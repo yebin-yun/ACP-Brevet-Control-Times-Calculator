@@ -1,12 +1,23 @@
-# UOCIS322 - Project 7 #
-> **Author: Ellie Yun, yyun@uoregon.edu**
+# ACP Brevet Control Times Calculator #
+> **Author: Ellie Yun, yyun.ellie@gmail.com**
 
-Adding authentication and user interface to brevet time calculator service
+Brevet time calculator with AJAX, MongoDB, and a RESTful API with authentication and user interface.
+
+## Getting started
+
+- Go to the ```brevets``` directory in the repository. 
+
+- Build the flask app images and run the container using
+           
+      docker compose up
+
 ## Design 
 
 This web application is composed with three services, and each service is implemented in a separate directory.
 
 ### brevets
+
+![brevets](images/brevets.png)
 
 In the ACP calculator web page, there are following functionalities:
 
@@ -22,9 +33,10 @@ In the ACP calculator web page, there are following functionalities:
 
 In the web browser, search the following url:
 
-    http://<host:port>/
+    http://<host>:<port>/
 
-`Note: Change the values for host and port according to your machine (check docker-compose.yml file for more details)`
+`Note: Change the values for host and port according to your machine.
+ (check docker-compose.yml file for more details - port is set to 7127, which is editable.)`
 
 ### api
 
@@ -77,9 +89,12 @@ This is a Restful service that includes the following functionalities:
             - "http://<host:port>/listCloseOnly/csv?top=6" should return top 5 close times only (in ascending order) in CSV format
             - "http://<host:port>/listCloseOnly/json?top=4" should return top 4 close times only (in ascending order) in JSON format
         
-        `Note: Change the values for host and port according to your machine (check docker-compose.yml file for more detials), and use the web browser to check the results.`
+        `Note: Change the values for host and port according to your machine 
+        (check docker-compose.yml file for more detials - port is set to 7227, which is editable.), and use the web browser to check the results.`
 
 ### website 
+
+![before login](images/website_before_login.png)
 
 This is a consumer program to use the services that the user expose. The services are described above in the api.
 This is a frontend/UI for Brevet app using Flask-WTF and Flask-Login. 
@@ -87,20 +102,22 @@ The frontend/UI should use the authentication, which is created on api.
 In addition to creating UI for basic authentication and token generation, the following three additional functionalities 
 will be added in the UI: 
 1. registration
-2. login
-3. remember me
-4. logout
+    ![register](images/website_register.png)
+2. sign in & remember me (possible after registration.)
+    ![register](images/website_sign_in.png)
+3. logout (possible after signing in.)
+    ![before login](images/website_after_login.png)
 
 #### How to test it?
 
 In the web browser, search the following url:
 
-    http://<host:port>/
+    http://<host>:<port>/
     
 Then, explore the tabs on the page!
 
-`Note: Change the values for host and port according to your machine (check docker-compose.yml file for more details)`
+`Note: Change the values for host and port according to your machine (check docker-compose.yml file for more details - port is set to 7327, which is editable.)`
 
 ## Credits
 
-Michal Young, Ram Durairajan, Steven Walton, Joe Istas.
+Michal Young, Ram Durairajan, Steven Walton, Joe Istas, Ali Hassani.
