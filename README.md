@@ -102,7 +102,7 @@ The frontend/UI should use the authentication, which is created on api.
 In addition to creating UI for basic authentication and token generation, the following three additional functionalities 
 will be added in the UI: 
 1. registration
-    ![register](images/website_register.png)
+    ![register](images/website_registe.png)
 2. sign in & remember me (possible after registration.)
     ![register](images/website_sign_in.png)
 3. logout (possible after signing in.)
