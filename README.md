@@ -17,7 +17,7 @@ This web application is composed with three services, and each service is implem
 
 ### brevets
 
-![brevets](images/brevets.png)
+![brevets](https://user-images.githubusercontent.com/87594239/127569871-99621a4e-6132-452e-959b-4e7a41e375c3.png)
 
 In the ACP calculator web page, there are following functionalities:
 
@@ -94,11 +94,11 @@ This is a Restful service that includes the following functionalities:
 
 ### website 
 
-![before login](images/website_before_login.png)
+![website_before_login](https://user-images.githubusercontent.com/87594239/127569902-9de6b5b0-ac5d-4602-90c9-994c5acfe125.png)
 
 This is a consumer program to use the services that the user expose. The services are described above in the api.
 
-![before login](images/website_service.png)
+![website_service](https://user-images.githubusercontent.com/87594239/127569920-66e9fd58-e1dd-46bf-b6ee-a6a91dfc04d8.png)
 
 This is a frontend/UI for Brevet app using Flask-WTF and Flask-Login. 
 The frontend/UI should use the authentication, which is created on api. 
@@ -106,15 +106,15 @@ In addition to creating UI for basic authentication and token generation, the fo
 will be added in the UI: 
 1. registration
 
-    ![register](images/website_register.png)
+    ![website_register](https://user-images.githubusercontent.com/87594239/127569948-b4e7b4a8-f1ba-4bcc-ae80-469323154946.png)
 
 2. sign in & remember me (possible after registration.)
 
-    ![register](images/website_sign_in.png)
+    ![website_sign_in](https://user-images.githubusercontent.com/87594239/127569960-21228e5b-b9e6-410f-9a2a-355bd260377d.png)
 
 3. logout (possible after signing in.)
 
-    ![before login](images/website_after_login.png)
+    ![website_after_login](https://user-images.githubusercontent.com/87594239/127569989-aa9f772f-9fc9-41a7-987b-ec7b923c8507.png)
 
 #### How to test it?
 
